@@ -147,73 +147,73 @@ export const BentoDifferentiators: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Column: Telemetry */}
+              {/* Right Column: Telemetry Box - Styled Clean for BOTH Light and Dark Theme */}
               <div className="lg:col-span-6">
-                <div className="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-2xl font-mono text-xs relative overflow-hidden">
-                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-[11px] text-slate-400">
+                <div className="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl p-5 border border-slate-200/90 dark:border-slate-800 shadow-lg font-mono text-xs relative overflow-hidden">
+                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
                         <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
                       </div>
-                      <span className="text-slate-300 font-semibold pl-2">
+                      <span className="text-slate-700 dark:text-slate-300 font-semibold pl-2">
                         elion-daemon --stream --device cuda:0
                       </span>
                     </div>
-                    <span className="text-emerald-400 animate-pulse flex items-center gap-1">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
                       ● LIVE
                     </span>
                   </div>
 
-                  <div className="space-y-2 text-slate-300">
-                    <div className="text-slate-400">
-                      [INFO] Target: <span className="text-cyan-300">PDB_7K43 (KRAS-G12D)</span>
+                  <div className="space-y-2 text-slate-600 dark:text-slate-300">
+                    <div>
+                      [INFO] Target: <span className="text-blue-700 dark:text-cyan-300 font-semibold">PDB_7K43 (KRAS-G12D)</span>
                     </div>
-                    <div className="text-slate-400">
+                    <div>
                       [INFO] Hardware:{" "}
-                      <span className="text-amber-300 font-bold">
+                      <span className="text-amber-700 dark:text-amber-300 font-bold">
                         {gpuProfiles[selectedGpu].name}
                       </span>
                     </div>
-                    <div className="text-slate-400">
+                    <div>
                       [INFO] Memory Bandwidth:{" "}
-                      <span className="text-emerald-300">
+                      <span className="text-emerald-700 dark:text-emerald-300 font-semibold">
                         {gpuProfiles[selectedGpu].bandwidth}
                       </span>
                     </div>
 
                     <div className="pt-2">
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">
+                        <span className="text-slate-500 dark:text-slate-400">
                           100ns Explicit Solvent MD (Amber ff14SB)
                         </span>
-                        <span className="text-blue-400 font-bold">
+                        <span className="text-blue-700 dark:text-blue-400 font-bold">
                           {gpuProfiles[selectedGpu].speed}
                         </span>
                       </div>
-                      <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
                         <div
-                          className="bg-gradient-to-r from-blue-500 to-cyan-400 h-2 rounded-full transition-all duration-500"
+                          className="bg-gradient-to-r from-blue-600 to-cyan-500 h-2 rounded-full transition-all duration-500"
                           style={{ width: "76%" }}
                         />
                       </div>
                     </div>
 
-                    <div className="mt-4 p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                    <div className="mt-4 p-3 rounded-xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 flex items-center justify-between shadow-xs">
                       <div>
-                        <span className="text-[10px] uppercase text-slate-400 block">
+                        <span className="text-[10px] uppercase text-slate-400 dark:text-slate-400 block font-semibold">
                           Elion Local Run Cost
                         </span>
-                        <span className="text-base font-bold text-emerald-400">
+                        <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">
                           {gpuProfiles[selectedGpu].costPerTrajectory}
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className="text-[10px] uppercase text-slate-400 block">
+                        <span className="text-[10px] uppercase text-slate-400 dark:text-slate-400 block font-semibold">
                           AWS / GCP Cloud Rate
                         </span>
-                        <span className="text-xs text-rose-400 line-through">
+                        <span className="text-xs text-rose-600 dark:text-rose-400 line-through font-semibold">
                           {gpuProfiles[selectedGpu].cloudEquivalent}
                         </span>
                       </div>

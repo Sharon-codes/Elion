@@ -13,7 +13,6 @@ interface TallyButtonProps {
   iconPosition?: "left" | "right";
   emojiText?: string;
   emojiAnimation?: string;
-  modalWidth?: number;
   onClick?: () => void;
 }
 
@@ -25,9 +24,6 @@ export const TallyButton: React.FC<TallyButtonProps> = ({
   size = "md",
   showIcon = true,
   iconPosition = "right",
-  emojiText = "🔬",
-  emojiAnimation = "wave",
-  modalWidth = 650,
   onClick,
 }) => {
   const baseStyles =
@@ -50,42 +46,19 @@ export const TallyButton: React.FC<TallyButtonProps> = ({
       "bg-white hover:bg-slate-50 text-blue-600 font-bold border border-slate-200/80 shadow-md hover:shadow-lg hover:-translate-y-0.5",
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const waitlistUrl = `https://tally.so/r/${formId}?transparentBackground=1&formEventsForwarding=1`;
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {
       onClick();
-    }
-
-    // Check if Tally global is available
-    if (typeof window !== "undefined" && (window as any).Tally) {
-      try {
-        (window as any).Tally.openPopup(formId, {
-          layout: "modal",
-          width: modalWidth,
-          emoji: {
-            text: emojiText,
-            animation: emojiAnimation,
-          },
-        });
-        return;
-      } catch (err) {
-        console.warn("Tally openPopup error, falling back to embedded modal", err);
-      }
-    }
-
-    // Always dispatch instant modal event as reliable fallback
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("open-elion-modal"));
     }
   };
 
   return (
-    <button
-      type="button"
-      data-tally-open={formId}
-      data-tally-layout="modal"
-      data-tally-width={modalWidth}
-      data-tally-emoji-text={emojiText}
-      data-tally-emoji-animation={emojiAnimation}
+    <a
+      href={waitlistUrl}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={handleClick}
       className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
     >
@@ -96,6 +69,6 @@ export const TallyButton: React.FC<TallyButtonProps> = ({
       {showIcon && iconPosition === "right" && (
         <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 text-blue-100" />
       )}
-    </button>
+    </a>
   );
 };

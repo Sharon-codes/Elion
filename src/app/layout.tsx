@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import { EarlyAccessModal } from "@/components/EarlyAccessModal";
 
 export const metadata: Metadata = {
   title: "Elion | End-to-End AI Drug Discovery on Your Local GPU",
@@ -40,7 +39,6 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-[#F8F9FA] dark:bg-[#090D16] text-slate-900 dark:text-white selection:bg-blue-100 selection:text-blue-900 min-h-screen">
         {children}
-        <EarlyAccessModal />
         {/* Tally.so Official Embed Script */}
         <Script
           src="https://tally.so/widgets/embed.js"
