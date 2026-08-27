@@ -12,7 +12,7 @@ import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#F8F9FA] dark:bg-[#090D16] text-slate-900 dark:text-white transition-colors duration-300 relative">
+    <main className="min-h-screen bg-[#F8F9FA] dark:bg-[#090D16] text-slate-900 dark:text-white transition-colors duration-300 relative w-full max-w-full overflow-x-hidden">
       {/* 1. Sticky Glassmorphic Navbar */}
       <Navbar />
 

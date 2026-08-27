@@ -149,7 +149,7 @@ export const CompetitorComparison: React.FC = () => {
   ];
 
   return (
-    <section id="comparison" className="py-16 sm:py-24 relative bg-[#FCFCFC] dark:bg-[#0B101E] border-b border-slate-200/60 dark:border-slate-800">
+    <section id="comparison" className="py-16 sm:py-24 relative bg-[#FCFCFC] dark:bg-[#0B101E] border-b border-slate-200/60 dark:border-slate-800 overflow-hidden">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[850px] h-[350px] clinical-glow rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

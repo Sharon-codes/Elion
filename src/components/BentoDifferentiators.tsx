@@ -53,7 +53,7 @@ export const BentoDifferentiators: React.FC = () => {
   };
 
   return (
-    <section id="architecture" className="py-24 relative bg-[#F8F9FA] dark:bg-[#090D16]">
+    <section id="architecture" className="py-16 sm:py-24 relative bg-[#F8F9FA] dark:bg-[#090D16] overflow-hidden">
       <div className="absolute top-1/2 left-10 w-96 h-96 teal-glow rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-96 h-96 lavender-glow rounded-full blur-3xl pointer-events-none" />
 

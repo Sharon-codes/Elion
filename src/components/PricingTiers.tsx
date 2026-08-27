@@ -142,7 +142,7 @@ export const PricingTiers: React.FC = () => {
   ];
 
   return (
-    <section id="pricing" className="py-16 sm:py-24 relative bg-[#FCFCFC] dark:bg-[#090D16] border-t border-slate-200/60 dark:border-slate-800">
+    <section id="pricing" className="py-16 sm:py-24 relative bg-[#FCFCFC] dark:bg-[#090D16] border-t border-slate-200/60 dark:border-slate-800 overflow-hidden">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] clinical-glow rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
