@@ -142,12 +142,12 @@ export const PricingTiers: React.FC = () => {
   ];
 
   return (
-    <section id="pricing" className="py-24 relative bg-[#FCFCFC] dark:bg-[#090D16] border-t border-slate-200/60 dark:border-slate-800">
+    <section id="pricing" className="py-16 sm:py-24 relative bg-[#FCFCFC] dark:bg-[#090D16] border-t border-slate-200/60 dark:border-slate-800">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] clinical-glow rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-700/80 text-xs font-mono font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-4">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Grant-Friendly &amp; Transparent</span>
@@ -155,20 +155,20 @@ export const PricingTiers: React.FC = () => {
           <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight font-sans mb-4">
             Transparent, Predictable Pricing.
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+          <p className="text-sm sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
             Designed for academic grant funding cycles and high-velocity biotechs. Never worry about
             runaway cloud GPU bills.
           </p>
 
           {/* Controls: Currency Switcher & Billing Frequency Toggle */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
             {/* Currency Selector */}
             <div className="inline-flex items-center gap-1 p-1 rounded-full bg-slate-100/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-inner">
               {(["USD", "EUR", "INR"] as Currency[]).map((cur) => (
                 <button
                   key={cur}
                   onClick={() => setCurrency(cur)}
-                  className={`px-3.5 py-1 rounded-full text-xs font-semibold font-mono transition-all cursor-pointer ${
+                  className={`px-2.5 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-semibold font-mono transition-all cursor-pointer ${
                     currency === cur
                       ? "bg-slate-900 dark:bg-blue-600 text-white shadow-sm"
                       : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
@@ -180,27 +180,27 @@ export const PricingTiers: React.FC = () => {
             </div>
 
             {/* Billing Frequency Toggle */}
-            <div className="inline-flex items-center gap-2 p-1 rounded-full bg-slate-100/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-inner">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 p-1 rounded-full bg-slate-100/90 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-inner">
               <button
                 onClick={() => setAnnual(false)}
-                className={`px-4 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                className={`px-3 sm:px-4 py-1 rounded-full text-[11px] sm:text-xs font-semibold transition-all cursor-pointer ${
                   !annual
                     ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900"
                 }`}
               >
-                Monthly Billing
+                Monthly
               </button>
               <button
                 onClick={() => setAnnual(true)}
-                className={`px-4 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3 sm:px-4 py-1 rounded-full text-[11px] sm:text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                   annual
                     ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900"
                 }`}
               >
-                <span>Annual Billing</span>
-                <span className="px-1.5 py-0.5 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-bold">
+                <span>Annual</span>
+                <span className="px-1.5 py-0.5 rounded-full bg-emerald-400 text-slate-950 text-[9px] sm:text-[10px] font-bold">
                   SAVE 20%
                 </span>
               </button>
@@ -209,7 +209,7 @@ export const PricingTiers: React.FC = () => {
 
           {/* Location / PPP Notice */}
           {currency === "INR" && (
-            <div className="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-medium animate-fade-in">
+            <div className="mt-4 inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[11px] sm:text-xs font-medium animate-fade-in text-left sm:text-center">
               <span>🇮🇳</span>
               <span>
                 <strong>PPP Pricing Enabled:</strong> Tailored for Indian universities, IITs, IISc, and DST/ICMR research grants.
@@ -219,14 +219,14 @@ export const PricingTiers: React.FC = () => {
         </div>
 
         {/* 4 Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 items-stretch mb-10 sm:mb-12">
           {tiers.map((tier) => {
             const Icon = tier.icon;
             const price = annual ? tier.priceAnnual : tier.priceMonthly;
             return (
               <div
                 key={tier.name}
-                className={`relative rounded-3xl p-6 sm:p-7 transition-all duration-300 flex flex-col justify-between bg-white dark:bg-slate-900 border ${
+                className={`relative rounded-3xl p-5 sm:p-7 transition-all duration-300 flex flex-col justify-between bg-white dark:bg-slate-900 border ${
                   tier.highlighted
                     ? "border-2 border-blue-600 shadow-2xl shadow-blue-600/10 lg:-translate-y-2"
                     : "border-slate-200/80 dark:border-slate-800 shadow-md hover:shadow-xl hover:border-slate-300 dark:hover:border-slate-700"
@@ -234,7 +234,7 @@ export const PricingTiers: React.FC = () => {
               >
                 {/* Highlight Badge */}
                 {tier.highlighted && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-mono font-bold tracking-wider uppercase shadow-md shadow-blue-500/30 whitespace-nowrap">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 sm:px-3.5 py-1 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase shadow-md shadow-blue-500/30 whitespace-nowrap">
                     {tier.badge}
                   </div>
                 )}
@@ -251,25 +251,25 @@ export const PricingTiers: React.FC = () => {
                       <Icon className="w-4 h-4" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-extrabold text-slate-900 dark:text-white font-sans leading-tight">
+                      <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white font-sans leading-tight">
                         {tier.name}
                       </h3>
-                      <span className="text-[11px] font-mono text-blue-700 dark:text-blue-400 font-semibold block">
+                      <span className="text-[10px] sm:text-[11px] font-mono text-blue-700 dark:text-blue-400 font-semibold block">
                         {tier.seats}
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-5 font-normal min-h-[34px]">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4 sm:mb-5 font-normal min-h-[30px] sm:min-h-[34px]">
                     {tier.tagline}
                   </p>
 
                   {/* Pricing Display */}
-                  <div className="pb-5 mb-5 border-b border-slate-200/60 dark:border-slate-800">
+                  <div className="pb-4 sm:pb-5 mb-4 sm:mb-5 border-b border-slate-200/60 dark:border-slate-800">
                     {tier.priceMonthly !== null ? (
                       <div>
                         <div className="flex items-baseline gap-1">
-                          <span className="text-3xl font-extrabold text-slate-900 dark:text-white font-sans tracking-tight">
+                          <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-sans tracking-tight">
                             {currentPrices.symbol}{price?.toLocaleString()}
                           </span>
                           <span className="text-xs font-medium text-slate-500 dark:text-slate-400 font-sans">
@@ -277,17 +277,17 @@ export const PricingTiers: React.FC = () => {
                           </span>
                         </div>
                         {annual && (
-                          <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-semibold block mt-0.5">
+                          <span className="text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-semibold block mt-0.5">
                             {tier.annualTotal}
                           </span>
                         )}
                       </div>
                     ) : (
                       <div>
-                        <span className="text-3xl font-extrabold text-slate-900 dark:text-white font-sans tracking-tight block">
+                        <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-sans tracking-tight block">
                           Custom
                         </span>
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium">
+                        <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-mono font-medium">
                           {tier.annualTotal}
                         </span>
                       </div>
@@ -295,8 +295,8 @@ export const PricingTiers: React.FC = () => {
                   </div>
 
                   {/* Features */}
-                  <div className="space-y-2.5 mb-6">
-                    <span className="text-[10px] uppercase font-mono font-bold text-slate-400 dark:text-slate-500 block tracking-wider">
+                  <div className="space-y-2 sm:space-y-2.5 mb-5 sm:mb-6">
+                    <span className="text-[9px] sm:text-[10px] uppercase font-mono font-bold text-slate-400 dark:text-slate-500 block tracking-wider">
                       Included Capabilities:
                     </span>
                     {tier.features.map((feature, idx) => {
@@ -340,21 +340,21 @@ export const PricingTiers: React.FC = () => {
         </div>
 
         {/* Pay-Per-Run Flex Pass Banner */}
-        <div className="glass-panel-elevated rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-900">
+        <div className="rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 max-w-3xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 bg-white dark:bg-slate-900 shadow-md">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold shrink-0">
-              <Zap className="w-5 h-5" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold shrink-0">
+              <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-slate-900 dark:text-white">
+                <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                   Pay-Per-Run Flex Pass
                 </span>
-                <span className="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-mono text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 font-mono text-[9px] sm:text-[10px] font-bold">
                   {currentPrices.academicIndiv.flexPass} / RUN
                 </span>
               </div>
-              <span className="text-xs text-slate-500 dark:text-slate-400">
+              <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 block mt-0.5">
                 {currency === "INR"
                   ? "For the occasional student who just needs data for their final thesis submission. No subscription required."
                   : "Need a single 35-test screening report for a manuscript or grant submission? No subscription required."}
@@ -366,7 +366,7 @@ export const PricingTiers: React.FC = () => {
             formId="kdBxYM"
             variant="primary"
             size="sm"
-            className="shrink-0 whitespace-nowrap"
+            className="shrink-0 w-full sm:w-auto text-center"
           >
             Join Waitlist
           </TallyButton>
