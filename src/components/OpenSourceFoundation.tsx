@@ -33,6 +33,7 @@ export const OpenSourceFoundation: React.FC = () => {
       license: "MIT",
       language: "Python / Cython",
       topics: ["d-peptides", "mirror-docking", "computational-biology", "autodock-gpu", "structural-bio"],
+      iconColor: "bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-slate-700",
     },
     {
       name: "chara-survival",
@@ -44,6 +45,7 @@ export const OpenSourceFoundation: React.FC = () => {
       license: "Apache 2.0",
       language: "Python / PyTorch",
       topics: ["transcriptomics", "graph-laplacian", "spectral-graph", "single-cell", "ood-generalization"],
+      iconColor: "bg-teal-50 dark:bg-slate-800 text-teal-600 dark:text-teal-400 border border-teal-100 dark:border-slate-700",
     },
   ];
 
@@ -54,7 +56,7 @@ export const OpenSourceFoundation: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Heading */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200/80 dark:border-blue-700/80 text-xs font-mono font-semibold text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-4">
             <Package className="w-3.5 h-3.5" />
             <span>Open Science &amp; Peer-Reviewed Toolkits</span>
           </div>
@@ -78,8 +80,8 @@ export const OpenSourceFoundation: React.FC = () => {
               <div>
                 <div className="flex items-center justify-between gap-4 mb-4">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center shadow-sm">
-                      <Code2 className="w-5 h-5 text-blue-400" />
+                    <div className={`w-10 h-10 rounded-2xl ${pkg.iconColor} flex items-center justify-center shadow-xs`}>
+                      <Code2 className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -98,7 +100,7 @@ export const OpenSourceFoundation: React.FC = () => {
                     href={pkg.pypiUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950 text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200/60 dark:border-slate-700 transition-colors"
                     aria-label={`View ${pkg.name} on PyPI`}
                   >
                     <ExternalLink className="w-4 h-4" />
@@ -113,7 +115,7 @@ export const OpenSourceFoundation: React.FC = () => {
                   {pkg.topics.map((topic) => (
                     <span
                       key={topic}
-                      className="px-2.5 py-1 rounded-md bg-slate-100/90 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 text-[11px] font-mono text-slate-600 dark:text-slate-300 font-medium"
+                      className="px-2.5 py-1 rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 text-[11px] font-mono text-slate-600 dark:text-slate-300 font-medium"
                     >
                       #{topic}
                     </span>
@@ -144,7 +146,7 @@ export const OpenSourceFoundation: React.FC = () => {
           ))}
         </div>
 
-        {/* CLI Terminal */}
+        {/* CLI Terminal Bar - Clean Light Mode & Dark Mode */}
         <div className="rounded-2xl p-5 sm:p-6 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 max-w-3xl mx-auto shadow-md">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -161,17 +163,17 @@ export const OpenSourceFoundation: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto bg-slate-900 text-slate-200 px-3.5 py-2 rounded-xl font-mono text-xs border border-slate-800 shadow-inner">
-              <span className="text-blue-400">$</span>
-              <code className="text-slate-300 select-all truncate max-w-[280px] sm:max-w-xs">
+            <div className="flex items-center gap-2 w-full sm:w-auto bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-3.5 py-2 rounded-xl font-mono text-xs border border-slate-200 dark:border-slate-700 shadow-xs">
+              <span className="text-blue-600 dark:text-blue-400 font-bold">$</span>
+              <code className="text-slate-800 dark:text-slate-200 font-semibold select-all truncate max-w-[280px] sm:max-w-xs">
                 pip install msdd chara-survival
               </code>
               <button
                 onClick={handleCopy}
-                className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white transition-colors shrink-0 ml-1 cursor-pointer"
+                className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0 ml-1 cursor-pointer"
                 title="Copy install command"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
           </div>
