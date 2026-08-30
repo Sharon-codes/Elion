@@ -329,15 +329,15 @@ export const MolecularCanvas: React.FC = () => {
 
       const isDarkMode = document.documentElement.classList.contains("dark");
 
-      // Refined clinical opacity so it never distracts from foreground content
+      // Refined clinical opacity - darkened slightly in light mode for enhanced legibility
       if (isDarkMode) {
-        ctx.strokeStyle = "rgba(96, 165, 250, 0.18)";
-        ctx.fillStyle = "rgba(147, 197, 253, 0.20)";
+        ctx.strokeStyle = "rgba(96, 165, 250, 0.20)";
+        ctx.fillStyle = "rgba(147, 197, 253, 0.22)";
       } else {
-        ctx.strokeStyle = "rgba(37, 99, 235, 0.16)";
-        ctx.fillStyle = "rgba(30, 58, 138, 0.18)";
+        ctx.strokeStyle = "rgba(29, 78, 216, 0.28)";
+        ctx.fillStyle = "rgba(30, 58, 138, 0.32)";
       }
-      ctx.lineWidth = 1.35;
+      ctx.lineWidth = 1.45;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
 
