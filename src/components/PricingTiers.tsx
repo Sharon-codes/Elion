@@ -108,6 +108,7 @@ export const PricingTiers: React.FC = () => {
       icon: FlaskConical,
       features: [
         "Everything in Academic Lab, plus:",
+        "Automated Clinical Trial Exclusion Reports (Toxicity & Genomic Non-responders)",
         "Closed-Loop AI DMTA Agent (Automated Failure Redesign)",
         "HIPAA / GDPR Zero-Retention Compliant by default",
         "Full IP Ownership (No Cloud Logging)",
@@ -130,6 +131,7 @@ export const PricingTiers: React.FC = () => {
       icon: Building2,
       features: [
         "Everything in Biotech, plus:",
+        "Custom Biomarker Stratification Models",
         "Dedicated private cloud instance or On-Premises VPC",
         "Custom fine-tuning on proprietary compound libraries",
         "HIPAA / GDPR Zero-Retention Compliant by default",

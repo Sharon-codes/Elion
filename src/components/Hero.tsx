@@ -35,15 +35,15 @@ export const Hero: React.FC = () => {
           </span>
         </h1>
 
-        {/* Sub-headline with generous horizontal spread */}
+        {/* Sub-headline with Clinical Stratification */}
         <p className="text-base sm:text-xl lg:text-2xl text-slate-600 dark:text-slate-300 max-w-4xl leading-relaxed font-normal mb-10 sm:mb-14">
           A 35-test computational screening pipeline featuring native{" "}
-          <span className="text-slate-900 dark:text-white font-semibold">D-Peptide inversion</span> and{" "}
+          <span className="text-slate-900 dark:text-white font-semibold">D-Peptide inversion</span>,{" "}
+          <span className="text-slate-900 dark:text-white font-semibold">local GPU dispatch</span>, and{" "}
           <span className="text-slate-900 dark:text-white font-semibold">
-            OOD transcriptomic robustness
+            automated clinical trial stratification
           </span>
-          . Zero-trust local execution ensures your proprietary structures never leave your
-          hardware. Academic pricing, zero cloud compute fees.
+          . Zero-trust local execution ensures your proprietary structures never leave your hardware.
         </p>
 
         {/* CTAs */}

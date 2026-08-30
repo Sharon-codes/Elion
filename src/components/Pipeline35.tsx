@@ -386,6 +386,7 @@ const pipelineTests: PipelineTest[] = [
 ];
 
 const marqueeEngines = [
+  { name: "Patient Exclusion Matrix", role: "Multi-Omics Phenotyping", badge: "Clinical De-risking" },
   { name: "AutoDock-GPU", role: "Lamarckian GA Docking", badge: "CUDA 12.4" },
   { name: "Boltz-2 Core", role: "FEP-Class Affinity (ΔΔG)", badge: "SOTA" },
   { name: "ADMETlab 3.0", role: "Safety & Toxicity Profiling", badge: "31 Endpoints" },
