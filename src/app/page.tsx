@@ -9,14 +9,18 @@ import { Pipeline35 } from "@/components/Pipeline35";
 import { OpenSourceFoundation } from "@/components/OpenSourceFoundation";
 import { PricingTiers } from "@/components/PricingTiers";
 import { Footer } from "@/components/Footer";
+import { MolecularCanvas } from "@/components/MolecularCanvas";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#F8F9FA] dark:bg-[#090D16] text-slate-900 dark:text-white transition-colors duration-300 relative w-full max-w-full overflow-x-hidden">
+      {/* Global Diagonal-Moving Chemistry Blueprint Background across the entire site */}
+      <MolecularCanvas />
+
       {/* 1. Sticky Glassmorphic Navbar */}
       <Navbar />
 
-      {/* 2. Hero Section with Zero-Trust Sub-headline & 3D Molecular Simulation */}
+      {/* 2. Hero Section with Widescreen Spread-Out Headline */}
       <Hero />
 
       {/* 3. Competitor Comparison Table & 5 Core Moats */}
