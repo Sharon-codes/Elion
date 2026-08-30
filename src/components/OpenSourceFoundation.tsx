@@ -50,7 +50,7 @@ export const OpenSourceFoundation: React.FC = () => {
   ];
 
   return (
-    <section id="opensource" className="py-16 sm:py-24 relative bg-[#F8F9FA] dark:bg-[#090D16] overflow-hidden">
+    <section id="opensource" className="py-16 sm:py-24 relative bg-transparent overflow-hidden">
       <div className="absolute top-1/2 left-1/3 w-96 h-96 teal-glow rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
