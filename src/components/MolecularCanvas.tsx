@@ -2,19 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 
-interface Node3D {
-  x: number;
-  y: number;
-  z: number;
-  baseX: number;
-  baseY: number;
-  baseZ: number;
-  radius: number;
-  color: string;
-  type: "carbon" | "nitrogen" | "oxygen" | "sulfur" | "ligand";
-  connections: number[];
-}
-
 export const MolecularCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -27,7 +14,7 @@ export const MolecularCanvas: React.FC = () => {
 
     let animationFrameId: number;
     let width = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
-    let height = (canvas.height = canvas.parentElement?.clientHeight || 650);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || 750);
 
     const handleResize = () => {
       if (!canvas || !canvas.parentElement) return;
@@ -44,95 +31,13 @@ export const MolecularCanvas: React.FC = () => {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Generate complex 3D molecular protein/ligand structure
-    const nodes: Node3D[] = [];
-    const numResidues = 32;
-    const helixRadius = 140;
-    const helixPitch = 380;
-
-    // 1. Alpha-helix protein backbone
-    for (let i = 0; i < numResidues; i++) {
-      const angle = (i / numResidues) * Math.PI * 5;
-      const y = (i / numResidues - 0.5) * helixPitch;
-      const x = Math.cos(angle) * (helixRadius + Math.sin(i * 0.4) * 20);
-      const z = Math.sin(angle) * (helixRadius + Math.sin(i * 0.4) * 20);
-
-      const types: ("carbon" | "nitrogen" | "oxygen" | "sulfur")[] = [
-        "nitrogen",
-        "carbon",
-        "carbon",
-        "oxygen",
-      ];
-      const type = types[i % 4];
-
-      const colors = {
-        carbon: "#3B82F6", // Electric Blue
-        nitrogen: "#2563EB", // Clinical Deep Blue
-        oxygen: "#0D9488", // Biotech Teal
-        sulfur: "#818CF8", // Lavender
-        ligand: "#1D4ED8",
-      };
-
-      nodes.push({
-        x,
-        y,
-        z,
-        baseX: x,
-        baseY: y,
-        baseZ: z,
-        radius: type === "sulfur" ? 4.5 : type === "carbon" ? 3.5 : 4,
-        color: colors[type],
-        type,
-        connections: i > 0 ? [i - 1] : [],
-      });
-    }
-
-    // Add cross-helix hydrogen bonds and side chains
-    for (let i = 0; i < numResidues - 4; i += 3) {
-      nodes[i].connections.push(i + 4);
-    }
-
-    // 2. Central Active Site & Mirror Ligand (D-Peptide core)
-    const ligandOffsetIndex = nodes.length;
-    const numLigandAtoms = 14;
-    for (let j = 0; j < numLigandAtoms; j++) {
-      const theta = (j / numLigandAtoms) * Math.PI * 2;
-      const phi = (j % 3) * 0.8 - 0.8;
-      const r = 45 + (j % 4) * 8;
-      const lx = Math.cos(theta) * Math.cos(phi) * r;
-      const ly = Math.sin(phi) * r + 10;
-      const lz = Math.sin(theta) * Math.cos(phi) * r;
-
-      nodes.push({
-        x: lx,
-        y: ly,
-        z: lz,
-        baseX: lx,
-        baseY: ly,
-        baseZ: lz,
-        radius: j === 0 ? 6 : 4.2,
-        color: j % 2 === 0 ? "#2563EB" : "#0284C7",
-        type: "ligand",
-        connections: j > 0 ? [ligandOffsetIndex + j - 1] : [],
-      });
-    }
-
-    // Connect ligand to active site pocket
-    if (nodes.length > ligandOffsetIndex + 3) {
-      nodes[ligandOffsetIndex].connections.push(12);
-      nodes[ligandOffsetIndex + 4].connections.push(16);
-      nodes[ligandOffsetIndex + 8].connections.push(20);
-    }
-
-    // Mouse tracking with spring physics
+    // Mouse parallax offset
     let mouseX = 0;
     let mouseY = 0;
-    let targetRotX = 0.002;
-    let targetRotY = 0.004;
-    let currentRotX = 0.002;
-    let currentRotY = 0.004;
-    let angleX = 0.3;
-    let angleY = 0.4;
+    let targetOffsetX = 0;
+    let targetOffsetY = 0;
+    let currentOffsetX = 0;
+    let currentOffsetY = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -140,142 +45,247 @@ export const MolecularCanvas: React.FC = () => {
       const ny = ((e.clientY - rect.top) / height) * 2 - 1;
       mouseX = nx;
       mouseY = ny;
-      targetRotY = nx * 0.015;
-      targetRotX = -ny * 0.015;
+      targetOffsetX = nx * 25;
+      targetOffsetY = ny * 25;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Ambient floating particles
-    const particles: { x: number; y: number; size: number; speed: number; opacity: number }[] = [];
-    for (let p = 0; p < 40; p++) {
-      particles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        size: Math.random() * 2 + 1,
-        speed: Math.random() * 0.3 + 0.1,
-        opacity: Math.random() * 0.4 + 0.1,
-      });
-    }
+    // Diagonal scroll offset tracker
+    let scrollX = 0;
+    let scrollY = 0;
+    const speedX = 0.35; // diagonal drift speed X
+    const speedY = 0.22; // diagonal drift speed Y
+
+    // Blueprint grid tile dimensions
+    const tileWidth = 720;
+    const tileHeight = 540;
+
+    // Helper to draw a benzene ring
+    const drawBenzene = (
+      ctx: CanvasRenderingContext2D,
+      cx: number,
+      cy: number,
+      radius: number,
+      rotation: number = 0,
+      withInnerCircle: boolean = true
+    ) => {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = rotation + (i * Math.PI) / 3;
+        const x = cx + radius * Math.cos(angle);
+        const y = cy + radius * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      if (withInnerCircle) {
+        // Inner alternating double bonds or resonance circle
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius * 0.58, 0, Math.PI * 2);
+        ctx.stroke();
+      } else {
+        // Alternating inner double lines
+        for (let i = 0; i < 6; i += 2) {
+          const a1 = rotation + (i * Math.PI) / 3 + 0.15;
+          const a2 = rotation + ((i + 1) * Math.PI) / 3 - 0.15;
+          const rInner = radius * 0.76;
+          ctx.beginPath();
+          ctx.moveTo(cx + rInner * Math.cos(a1), cy + rInner * Math.sin(a1));
+          ctx.lineTo(cx + rInner * Math.cos(a2), cy + rInner * Math.sin(a2));
+          ctx.stroke();
+        }
+      }
+    };
+
+    // Helper to draw Quinoline fused ring system
+    const drawQuinoline = (ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) => {
+      const dx = r * 1.5;
+      drawBenzene(ctx, cx - dx * 0.5, cy, r, 0, false);
+      drawBenzene(ctx, cx + dx * 0.5, cy, r, 0, false);
+
+      // Substituents (H3CO-)
+      ctx.beginPath();
+      ctx.moveTo(cx - dx * 0.5 - r, cy - r * 0.5);
+      ctx.lineTo(cx - dx * 0.5 - r - 16, cy - r * 0.5 - 8);
+      ctx.moveTo(cx - dx * 0.5 - r, cy + r * 0.5);
+      ctx.lineTo(cx - dx * 0.5 - r - 16, cy + r * 0.5 + 8);
+      ctx.stroke();
+
+      ctx.fillText("H₃CO", cx - dx * 0.5 - r - 48, cy - r * 0.5 - 4);
+      ctx.fillText("H₃CO", cx - dx * 0.5 - r - 48, cy + r * 0.5 + 12);
+      ctx.fillText("N", cx + dx * 0.5 + r * 0.2, cy + r * 0.95);
+    };
+
+    // Helper to draw a 5-membered heterocycle (like pyrazole/cyclopentyl)
+    const drawFiveRing = (
+      ctx: CanvasRenderingContext2D,
+      cx: number,
+      cy: number,
+      radius: number,
+      rotation: number = -Math.PI / 2
+    ) => {
+      ctx.beginPath();
+      for (let i = 0; i < 5; i++) {
+        const angle = rotation + (i * Math.PI * 2) / 5;
+        const x = cx + radius * Math.cos(angle);
+        const y = cy + radius * Math.sin(angle);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // Double bond on top
+      const a1 = rotation + (1 * Math.PI * 2) / 5 + 0.15;
+      const a2 = rotation + (2 * Math.PI * 2) / 5 - 0.15;
+      ctx.beginPath();
+      ctx.moveTo(cx + radius * 0.75 * Math.cos(a1), cy + radius * 0.75 * Math.sin(a1));
+      ctx.lineTo(cx + radius * 0.75 * Math.cos(a2), cy + radius * 0.75 * Math.sin(a2));
+      ctx.stroke();
+    };
+
+    // Helper to draw cyclobutane box
+    const drawCyclobutane = (ctx: CanvasRenderingContext2D, cx: number, cy: number, size: number) => {
+      const half = size / 2;
+      ctx.strokeRect(cx - half, cy - half, size, size);
+      ctx.fillText("CH₂", cx - half - 26, cy - half - 4);
+      ctx.fillText("CH₂", cx + half + 6, cy - half - 4);
+      ctx.fillText("CH₂", cx - half - 26, cy + half + 14);
+      ctx.fillText("CH₂", cx + half + 6, cy + half + 14);
+    };
+
+    // Draw one full blueprint tile
+    const drawBlueprintTile = (ctx: CanvasRenderingContext2D, ox: number, oy: number) => {
+      ctx.save();
+      ctx.translate(ox, oy);
+
+      // Font styling for chemical notation
+      ctx.font = "500 12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+
+      // 1. Phenol with OH group (Top Left)
+      drawBenzene(ctx, 80, 70, 26, 0, false);
+      ctx.beginPath();
+      ctx.moveTo(80 + 26, 70);
+      ctx.lineTo(80 + 44, 70);
+      ctx.moveTo(80, 70 - 26);
+      ctx.lineTo(80, 70 - 42);
+      ctx.stroke();
+      ctx.fillText("OH", 80 + 48, 74);
+      ctx.fillText("H₂N", 72, 70 - 46);
+      ctx.fillText("H₂SiO₃ (R₃)ₙ", 30, 24);
+
+      // 2. Pyridine Carboxylic Acid (Center Top)
+      drawBenzene(ctx, 280, 160, 24, Math.PI / 6, false);
+      ctx.beginPath();
+      ctx.moveTo(280 + 24 * Math.cos(Math.PI / 6), 160 + 24 * Math.sin(Math.PI / 6));
+      ctx.lineTo(280 + 45, 160 + 10);
+      ctx.lineTo(280 + 58, 160 + 22);
+      ctx.stroke();
+      ctx.fillText("OH", 280 + 64, 160 + 26);
+      ctx.fillText("=O", 280 + 48, 160 - 2);
+      ctx.fillText("N", 276, 160 + 22);
+      ctx.fillText("H₃PO₄", 340, 190);
+
+      // 3. Branched Quinoline Core (Middle Left)
+      drawQuinoline(ctx, 160, 270, 25);
+      ctx.fillText("OCH₃", 220, 200);
+
+      // 4. Pyrazole Derivative (Top Right)
+      drawFiveRing(ctx, 400, 95, 28);
+      ctx.beginPath();
+      ctx.moveTo(400 + 28, 95);
+      ctx.lineTo(400 + 50, 85);
+      ctx.moveTo(400 - 28, 95);
+      ctx.lineTo(400 - 48, 105);
+      ctx.stroke();
+      ctx.fillText("N—C₆H₅", 400 + 54, 88);
+      ctx.fillText("O=", 400 - 64, 108);
+      ctx.fillText("CH₃(CH₂)₃", 220, 50);
+
+      // 5. Cyclobutane Bridge (Middle Right)
+      drawCyclobutane(ctx, 520, 250, 48);
+
+      // 6. Substituted Benzene with Methane (Bottom Center)
+      drawBenzene(ctx, 360, 410, 28, 0, false);
+      // Hydrogen spokes
+      for (let i = 0; i < 6; i++) {
+        const a = (i * Math.PI) / 3;
+        ctx.beginPath();
+        ctx.moveTo(360 + 28 * Math.cos(a), 410 + 28 * Math.sin(a));
+        ctx.lineTo(360 + 40 * Math.cos(a), 410 + 40 * Math.sin(a));
+        ctx.stroke();
+        ctx.fillText("H", 360 + 44 * Math.cos(a) - 4, 410 + 44 * Math.sin(a) + 4);
+      }
+
+      // 7. Alkene / Double bond chain (Left bottom)
+      ctx.beginPath();
+      ctx.moveTo(70, 420);
+      ctx.lineTo(110, 420);
+      ctx.moveTo(70, 425);
+      ctx.lineTo(110, 425);
+      ctx.stroke();
+      ctx.fillText("H₂C = CH₂", 60, 442);
+      ctx.fillText("HNO₃", 40, 390);
+
+      // 8. Chemical Equations & Reactions (Scattered authentically like the image)
+      ctx.font = "600 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+      ctx.fillText("2 H₂O  ⟶  2 H₂ + O₂", 210, 320);
+      ctx.fillText("2 Cu + O₂  ⟶  2 CuO", 210, 350);
+      ctx.fillText("HCl + NaOH  ⟶  NaCl + H₂O", 380, 25);
+      ctx.fillText("Zn + 2HCl  ⟶  ZnCl₂ + H₂", 540, 340);
+      ctx.fillText("2 Al + 3S  ⟶  Al₂S₃", 430, 145);
+      ctx.fillText("2 KClO₃  ⟶  2 KCl + 3 O₂", 430, 185);
+
+      // 9. Modern Computational Drug Discovery Annotations (Subtle Biotech Touch)
+      ctx.font = "italic 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+      ctx.fillText("ΔG_bind = -12.4 kcal/mol", 530, 95);
+      ctx.fillText("L = D - A  (λ₁ > 0.90)", 540, 130);
+      ctx.fillText("χ: (x,y,z) → (-x,-y,-z)", 530, 460);
+      ctx.fillText("Boltz-2 FEP  ΔΔG < -11.8", 120, 500);
+
+      ctx.restore();
+    };
 
     // Render loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth camera rotation interpolation
-      currentRotX += (targetRotX - currentRotX) * 0.05;
-      currentRotY += (targetRotY - currentRotY) * 0.05;
-      angleY += 0.003 + currentRotY;
-      angleX += currentRotX * 0.5;
+      // Update diagonal scroll position
+      scrollX = (scrollX + speedX) % tileWidth;
+      scrollY = (scrollY + speedY) % tileHeight;
 
-      const cosY = Math.cos(angleY);
-      const sinY = Math.sin(angleY);
-      const cosX = Math.cos(angleX);
-      const sinX = Math.sin(angleX);
+      // Parallax smooth interpolation
+      currentOffsetX += (targetOffsetX - currentOffsetX) * 0.05;
+      currentOffsetY += (targetOffsetY - currentOffsetY) * 0.05;
 
-      const fov = 450;
-      const centerX = width / 2;
-      const centerY = height / 2 - 20;
+      const isDarkMode = document.documentElement.classList.contains("dark");
 
-      // Project nodes to 2D screen
-      const projected = nodes.map((node) => {
-        // Rotate Y
-        let x1 = node.baseX * cosY - node.baseZ * sinY;
-        let z1 = node.baseZ * cosY + node.baseX * sinY;
-
-        // Rotate X
-        let y1 = node.baseY * cosX - z1 * sinX;
-        let z2 = z1 * cosX + node.baseY * sinX;
-
-        // Perspective scale
-        const scale = fov / (fov + z2 + 300);
-        const px = centerX + x1 * scale;
-        const py = centerY + y1 * scale;
-
-        return {
-          px,
-          py,
-          scale,
-          z: z2,
-          radius: Math.max(1.5, node.radius * scale),
-          color: node.color,
-          connections: node.connections,
-          type: node.type,
-        };
-      });
-
-      // Render subtle background floating particles
-      particles.forEach((p) => {
-        p.y -= p.speed;
-        if (p.y < 0) {
-          p.y = height;
-          p.x = Math.random() * width;
-        }
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(59, 130, 246, ${p.opacity * 0.5})`;
-        ctx.fill();
-      });
-
-      // Draw covalent bonds / graph edges with distance-based alpha
-      for (let i = 0; i < projected.length; i++) {
-        const p1 = projected[i];
-        p1.connections.forEach((targetIdx) => {
-          if (targetIdx < projected.length) {
-            const p2 = projected[targetIdx];
-            const avgZ = (p1.z + p2.z) / 2;
-            const alpha = Math.max(0.08, Math.min(0.45, (avgZ + 200) / 400));
-
-            ctx.beginPath();
-            ctx.moveTo(p1.px, p1.py);
-            ctx.lineTo(p2.px, p2.py);
-            ctx.strokeStyle = `rgba(59, 130, 246, ${alpha})`;
-            ctx.lineWidth = Math.max(1, 1.8 * ((p1.scale + p2.scale) / 2));
-            ctx.stroke();
-          }
-        });
+      // Set blueprint stroke and text colors
+      // In light mode: blueprint cobalt / clinical deep blue stroke with crisp clarity
+      // In dark mode: luminous cyan / indigo glow stroke
+      if (isDarkMode) {
+        ctx.strokeStyle = "rgba(96, 165, 250, 0.16)"; // soft cyan/blue in dark mode
+        ctx.fillStyle = "rgba(147, 197, 253, 0.18)";
+      } else {
+        ctx.strokeStyle = "rgba(37, 99, 235, 0.14)"; // clinical blueprint blue in light mode
+        ctx.fillStyle = "rgba(30, 58, 138, 0.16)";
       }
+      ctx.lineWidth = 1.35;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
 
-      // Sort nodes by Z for proper depth rendering
-      const sortedIndices = projected.map((_, i) => i).sort((a, b) => projected[a].z - projected[b].z);
+      // Calculate start and end tile indices to cover whole viewport seamlessly with diagonal drift
+      const startX = -tileWidth + (scrollX + currentOffsetX) % tileWidth;
+      const startY = -tileHeight + (scrollY + currentOffsetY) % tileHeight;
 
-      // Render atom nodes with soft radial lighting
-      sortedIndices.forEach((idx) => {
-        const p = projected[idx];
-        const depthAlpha = Math.max(0.3, Math.min(1, (p.z + 200) / 380));
-
-        // Soft atom glow
-        const glowGrad = ctx.createRadialGradient(
-          p.px - p.radius * 0.3,
-          p.py - p.radius * 0.3,
-          p.radius * 0.1,
-          p.px,
-          p.py,
-          p.radius * 2.5
-        );
-        glowGrad.addColorStop(0, p.color);
-        glowGrad.addColorStop(0.5, p.color + "99");
-        glowGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
-
-        ctx.beginPath();
-        ctx.arc(p.px, p.py, p.radius * 2.2, 0, Math.PI * 2);
-        ctx.fillStyle = glowGrad;
-        ctx.fill();
-
-        // Atom sphere core
-        ctx.beginPath();
-        ctx.arc(p.px, p.py, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = depthAlpha;
-        ctx.fill();
-        ctx.globalAlpha = 1.0;
-
-        // Specular highlight on node
-        ctx.beginPath();
-        ctx.arc(p.px - p.radius * 0.3, p.py - p.radius * 0.3, p.radius * 0.35, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
-        ctx.fill();
-      });
+      for (let x = startX - tileWidth; x < width + tileWidth * 2; x += tileWidth) {
+        for (let y = startY - tileHeight; y < height + tileHeight * 2; y += tileHeight) {
+          drawBlueprintTile(ctx, x, y);
+        }
+      }
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -290,10 +300,10 @@ export const MolecularCanvas: React.FC = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center select-none">
       <canvas
         ref={canvasRef}
-        className="w-full h-full opacity-65 transition-opacity duration-1000"
+        className="w-full h-full opacity-85 transition-opacity duration-700"
       />
     </div>
   );
